@@ -10,6 +10,8 @@ app = Flask(__name__)
 
 load_dotenv()  # Loads variables from .env file
 # --- Bad Practice: Hardcoded credentials (Your task to fix!) --- [fixed]
+APP_PORT = int(os.getenv("APP_PORT"))
+
 DB_NAME = os.getenv("DB_NAME")
 DB_USER = os.getenv("DB_USER")
 DB_PASS = os.getenv("DB_PASS")
@@ -87,4 +89,4 @@ def redirect_to_url(short_code):
 
 if __name__ == '__main__':
     init_db()
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=APP_PORT, debug=True)

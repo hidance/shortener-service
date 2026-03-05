@@ -1,0 +1,62 @@
+services:
+  db:
+    image: postgres:13
+    container_name: postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - backend
+
+  redis:
+    image: redis:6
+    container_name: redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - backend
+  app:
+    build: ./app
+    container_name: app
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./app/.env
+    depends_on:
+      - db
+      - redis
+    networks:
+      - frontend
+      - backend
+  adminer:
+    image: adminer:latest
+    container_name: adminer
+    restart: unless-stopped
+    environment:
+      - ADMINER_DEFAULT_SERVER=db
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - frontend
+      - backend
+
+volumes:
+  postgres_data:
+
+    #frontend - public network
+    #backend - private network
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
