@@ -3,18 +3,21 @@ import secrets
 import redis
 import psycopg2
 from flask import Flask, request, jsonify, redirect
+from dotenv import load_dotenv
 
 app = Flask(__name__)
 
-# --- Bad Practice: Hardcoded credentials (Your task to fix!) ---
-DB_NAME = "shortener_db"
-DB_USER = "admin"
-DB_PASS = "very_secret_password_123"
-DB_HOST = "localhost" # In Docker, this will be the service name
-DB_PORT = "5432"
 
-REDIS_HOST = "localhost"
-REDIS_PORT = 6379
+load_dotenv()  # Loads variables from .env file
+# --- Bad Practice: Hardcoded credentials (Your task to fix!) --- [fixed]
+DB_NAME = os.getenv("DB_NAME")
+DB_USER = os.getenv("DB_USER")
+DB_PASS = os.getenv("DB_PASS")
+DB_HOST = os.getenv("DB_HOST") # In Docker, this will be the service name
+DB_PORT = int(os.getenv("DB_PORT"))
+
+REDIS_HOST = os.getenv("REDIS_HOST")
+REDIS_PORT = int(os.getenv("REDIS_PORT"))
 # -------------------------------------------------------------
 
 def get_db_connection():
