@@ -46,6 +46,10 @@ def init_db():
     except Exception as e:
         print(f"Database error: {e}")
 
+@app.route('/')
+def index():
+    return "<h1>Micro-Shortener API is running!</h1><p>Use POST /shorten to create a link.</p>"
+
 @app.route('/shorten', methods=['POST'])
 def shorten():
     data = request.get_json()
@@ -62,7 +66,7 @@ def shorten():
     cur.close()
     conn.close()
 
-    return jsonify({"short_url": f"http://localhost:8000/{short_code}"})
+    return jsonify({"short_url": f"http://localhost:{APP_PORT}/{short_code}"})
 
 @app.route('/<short_code>')
 def redirect_to_url(short_code):

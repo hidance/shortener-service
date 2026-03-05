@@ -27,9 +27,9 @@ services:
     container_name: app
     restart: unless-stopped
     ports:
-      - "5000:5000"
+      - "${APP_PORT}:${APP_PORT}"
     env_file:
-      - ./app/.env
+      - .env
     depends_on:
       - db
       - redis
@@ -38,7 +38,7 @@ services:
       - backend
   adminer:
     image: adminer:latest
-    container_name: adminer
+    container_name: aadminer
     restart: unless-stopped
     environment:
       - ADMINER_DEFAULT_SERVER=db
